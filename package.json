@@ -1,0 +1,45 @@
+{
+  "name": "multistep",
+  "version": "0.0.1-alpha",
+  "description": "KSelect is a multi-select plugin based on material design with search option.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "KSelect",
+    "k-select",
+    "multi-select",
+    "multiselect",
+    "plugin",
+    "material"
+  ],
+  "author": "Kinle A G (kinle.greshka@gmail.com)",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^10.0.1",
+    "babel-preset-env": "^1.7.0",
+    "browser-sync": "^2.26.5",
+    "eslint": "^5.16.0",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^6.1.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-minify": "^3.1.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.2"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kinle/MultiStep.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kinle/MultiStep/issues"
+  },
+  "homepage": "https://github.com/Kinle/MultiStep#readme",
+  "directories": {
+    "doc": "docs"
+  }
+}

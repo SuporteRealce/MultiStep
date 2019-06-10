@@ -84,18 +84,24 @@
       justify-content: center; }
       .multi-step .modal-header .modal-steps .step:first-child:before {
         width: 50% !important;
-        right: 0; }
+        left: unset;
+        right: unset;
+        -webkit-transform: translateX(51%);
+        -ms-transform: translateX(51%);
+        transform: translateX(51%); }
+      .multi-step .modal-header .modal-steps .step:first-child:after {
+        width: 50% !important;
+        left: unset;
+        right: unset;
+        -webkit-transform: translateX(51%);
+        -ms-transform: translateX(51%);
+        transform: translateX(51%); }
       .multi-step .modal-header .modal-steps .step:last-child:before {
         width: 50% !important;
         left: 0; }
-      .multi-step .modal-header .modal-steps .step:first-child:after {
-        width: 50% !important;
-        right: 0 !important;
-        left: unset !important; }
       .multi-step .modal-header .modal-steps .step:last-child:after {
         width: 50% !important;
-        left: 0 !important;
-        right: unset !important; }
+        left: 0; }
       .multi-step .modal-header .modal-steps .step:before {
         position: absolute;
         border: 1px solid;
@@ -115,24 +121,29 @@
         top: 11px;
         left: 0;
         content: '';
-        -webkit-transition: 0.5s;
-        -o-transition: 0.5s;
-        transition: 0.5s; }
+        -webkit-transition: 0.2s linear;
+        -o-transition: 0.2s linear;
+        transition: 0.2s linear; }
       .multi-step .modal-header .modal-steps .step.current:after {
-        width: calc( 50% - 10px);
-        -webkit-transition: 0.5s;
-        -o-transition: 0.5s;
-        transition: 0.5s; }
+        width: calc(50% - 10px);
+        -webkit-transition: 0.2s linear;
+        -o-transition: 0.2s linear;
+        transition: 0.2s linear; }
+      .multi-step .modal-header .modal-steps .step.current:first-child:after {
+        width: 0% !important;
+        -webkit-transition: 0.2s linear;
+        -o-transition: 0.2s linear;
+        transition: 0.2s linear; }
       .multi-step .modal-header .modal-steps .step.completed:after {
         width: 100%;
-        -webkit-transition: 0.5s;
-        -o-transition: 0.5s;
-        transition: 0.5s; }
+        -webkit-transition: 0.2s linear;
+        -o-transition: 0.2s linear;
+        transition: 0.2s linear; }
       .multi-step .modal-header .modal-steps .step.skipped:after {
         width: 100%;
-        -webkit-transition: 0.5s;
-        -o-transition: 0.5s;
-        transition: 0.5s; }
+        -webkit-transition: 0.2s linear;
+        -o-transition: 0.2s linear;
+        transition: 0.2s linear; }
       .multi-step .modal-header .modal-steps .step .dot {
         height: 20px;
         width: 20px;
@@ -167,3 +178,28 @@
         flex: 0 0 100%;
         margin-top: 0.5em;
         margin-bottom: 0.5em; }
+
+.multi-step .modal-body .step-content-container {
+  position: relative;
+  height: 100%; }
+  .multi-step .modal-body .step-content-container .step-content {
+    display: none;
+    position: relative;
+    top: 0;
+    left: 0; }
+    .multi-step .modal-body .step-content-container .step-content .content-inner {
+      position: relative; }
+    .multi-step .modal-body .step-content-container .step-content.active {
+      display: inline-block; }
+
+.multi-step .modal-footer .btn-prev {
+  margin-right: auto; }
+
+.multi-step .modal-footer .btn-skip {
+  display: none; }
+  .multi-step .modal-footer .btn-skip.skippable {
+    display: block; }
+
+.multi-step .modal-footer .disabled,
+.multi-step .modal-footer :disabled {
+  cursor: not-allowed; }

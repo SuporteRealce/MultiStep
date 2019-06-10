@@ -72,4 +72,33 @@
 
         }
     }
+
+    .modal-footer {
+        .btn-prev {
+            background-color: $step_primary_color;
+
+            &.disabled {
+                background-color: $step_default_color;
+                color: #000;
+            }
+        }
+
+        .btn-skip {
+            background-color: $step_skipped_color;
+
+            &.disabled {
+                background-color: $step_default_color;
+                color: #000;
+            }
+        }
+
+        .btn-next {
+            background-color: $step_primary_color;
+
+            &.disabled {
+                background-color: $step_default_color;
+                color: #000;
+            }
+        }
+    }
 }

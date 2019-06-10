@@ -1,7 +1,8 @@
  $(document).ready(function() {
         $('.modal').MultiStep({
         	data:[{
-        		content:'Hi!!'
+        		content:'Hi!!',
+                label:'Custom label'
         	},{
         		content:'This is a multi-step modal'
         	},{

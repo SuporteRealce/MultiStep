@@ -63,23 +63,26 @@
 
                 &:first-child:before {
                     width: 50% !important;
-                    right: 0;
+                    left: unset;
+                    right: unset;
+                    transform: translateX(51%);
+                }
+
+                &:first-child:after {
+                    width: 50% !important;
+                    left: unset;
+                    right: unset;
+                    transform: translateX(51%);
                 }
 
                 &:last-child:before {
                     width: 50% !important;
                     left: 0;
                 }
-                &:first-child:after {
-                    width: 50% !important;
-                    right: 0 !important;
-                    left: unset !important;
-                }
 
                 &:last-child:after {
                     width: 50% !important;
-                    left: 0 !important;
-                    right: unset !important;
+                    left: 0;
                 }
 
                 &:before {
@@ -108,15 +111,21 @@
 
                 &.current {
                     &:after {
-                        width: calc( 50% - #{($step_dot_width/2)} );
+                        width: calc(50% - #{($step_dot_width/2)});
                         transition: $step_transition;
                     }
+                    &:first-child:after {
+                        width: 0% !important;
+                        transition: $step_transition;
+                    }
+
                 }
 
                 &.completed {
                     &:after {
                         width: 100%;
                         transition: $step_transition;
+
                     }
                 }
 
@@ -160,6 +169,47 @@
                     margin-bottom: 0.5em;
                 }
             }
+        }
+    }
+
+    .modal-body {
+        .step-content-container {
+            position: relative;
+            height: 100%;
+
+            .step-content {
+                display: none;
+                position: relative;
+                top: 0;
+                left: 0;
+
+                .content-inner {
+                    position: relative;
+                }
+
+                &.active {
+                    display: inline-block;
+                }
+            }
+        }
+    }
+
+    .modal-footer {
+        .btn-prev {
+            margin-right: auto;
+        }
+
+        .btn-skip {
+            display: none;
+
+            &.skippable {
+                display: block;
+            }
+        }
+
+        .disabled,
+        :disabled {
+            cursor: not-allowed;
         }
     }
 }

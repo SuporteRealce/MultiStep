@@ -1,6 +1,8 @@
 # MultiStep
 MultiStep is a multi-step wizard plugin based on bootstrap 4.0
 
+[Demo page](demo.html)
+
 # Getting started
 Prerequisities
 jQuery - v3.4.x

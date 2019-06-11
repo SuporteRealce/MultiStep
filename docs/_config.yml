@@ -1,3 +1,4 @@
 theme: jekyll-theme-slate
 include:
   - index.md
+  - demo.html

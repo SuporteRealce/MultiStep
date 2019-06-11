@@ -186,7 +186,8 @@
     display: none;
     position: relative;
     top: 0;
-    left: 0; }
+    left: 0;
+    width: 100%; }
     .multi-step .modal-body .step-content-container .step-content .content-inner {
       position: relative; }
     .multi-step .modal-body .step-content-container .step-content.active {
@@ -203,3 +204,26 @@
 .multi-step .modal-footer .disabled,
 .multi-step .modal-footer :disabled {
   cursor: not-allowed; }
+
+.flex-center {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 100%; }
+  .flex-center p {
+    margin: 0; }
+  .flex-center ul {
+    text-align: center; }
+    .flex-center ul li {
+      margin-bottom: 1rem; }
+      .flex-center ul li:last-of-type {
+        margin-bottom: 0; }

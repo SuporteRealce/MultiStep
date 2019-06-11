@@ -114,6 +114,7 @@
                         width: calc(50% - #{($step_dot_width/2)});
                         transition: $step_transition;
                     }
+
                     &:first-child:after {
                         width: 0% !important;
                         transition: $step_transition;
@@ -182,6 +183,7 @@
                 position: relative;
                 top: 0;
                 left: 0;
+                width: 100%;
 
                 .content-inner {
                     position: relative;
@@ -210,6 +212,29 @@
         .disabled,
         :disabled {
             cursor: not-allowed;
+        }
+    }
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    p {
+        margin: 0;
+    }
+
+    ul {
+        text-align: center;
+
+        li {
+            margin-bottom: 1rem;
+
+            &:last-of-type {
+                margin-bottom: 0;
+            }
         }
     }
 }

@@ -30,6 +30,8 @@
     var _modalBodyClass = 'modal-body';
     var _modalFooterClass = 'modal-footer';
     var _modalStepsClass = 'modal-steps';
+    var _stepDotClass = 'dot';
+    var _stepLabelClass = 'label';
     var _stepClass = 'step';
     var _stepContentContainerClass = 'step-content-container';
     var _stepContentClass = 'step-content';
@@ -37,18 +39,45 @@
     var _prevClass = 'btn-prev';
     var _skipClass = 'btn-skip';
     var _nextClass = 'btn-next';
+    var _currentClass = 'current';
+    var _completedClass = 'completed';
+    var _skippedClass = 'skipped';
+    var _disabledClass = 'disabled';
+    var _skippableClass = 'skippable';
     var defaults = {
         data: [],
-        final: 'Are you sure you want to finalize with selected options?'
+        final: 'Are you sure you want to confirm?',
+        finalLabel: 'Complete',
+        title: '',
+        prevText: 'Previous',
+        skipText: 'Skip',
+        nextText: 'Next',
+        finishText: 'Finish',
+        modalSize: 'md',
+        onClose: function() {
+
+        },
+        onDestroy: function($elem) {
+
+        }
+
     };
 
     var multiStep = function($element, options) {
         var $this = this;
-        this.id = null;
         this.element = $element;
         this.options = $.extend({}, defaults, options);
         this.destroy = function() {
-            console.log('destroying ' + $this.id);
+            this.element.html('');
+            var id = this.element.attr('data-id')
+            this.element.attr('id', id);
+            this.element.removeAttr('data-id')
+                .removeAttr('class')
+                .removeAttr('tabindex')
+                .removeAttr('role')
+                .removeAttr('aria-labelledby')
+                .removeAttr('aria-hidden');
+            this._onDestroy();
         }
         this.init();
     };
@@ -62,15 +91,15 @@
     multiStep.prototype = {
         constructor: multiStep,
         init: function() {
+            this._buildModal();
             this._buildMultiStep();
-
         },
         update: function(options) {
             this.options = $.extend({}, this.options, options);
-            this._buildDataContent();
-            this._initialModal();
+            this.init();
         },
         _buildMultiStep: function() {
+
             var $element = this.element;
             var id = $element.attr('id')
             if (!id || id.trim() == '') {
@@ -94,6 +123,42 @@
             this._initialModal();
 
         },
+        _buildModal: function() {
+            var id = this.element.attr('id');
+            var dataId = id;
+            if (this.options.id) {
+                id = this.options.id;
+            }
+            if (!id) {
+                id = uuidv4();
+            }
+            this.element.attr('id', id)
+                .attr('data-id', dataId)
+                .attr('class', 'modal fade')
+                .attr('tabindex', '-1')
+                .attr('role', 'dialog')
+                .attr('aria-labelledby', `${id}Title`)
+                .attr('aria-hidden', 'true');
+            this.element.html(`<div class="modal-dialog modal-dialog-centered modal-${this.options.modalSize}" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="${id}LongTitle">${this.options.title}</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"></div><div class="modal-footer"></div></div></div>`);
+            var $this = this;
+            this.element.on('hide.bs.modal', function() {
+                $this._initialModal();
+                $this._onClose();
+            }).on('hidden.bs.modal', function() {
+                $this._initialModal();
+                $this._onClose();
+            })
+        },
+        _onClose: function() {
+            if (typeof this.options.onClose == 'function') {
+                this.options.onClose(this.element);
+            }
+        },
+        _onDestroy: function() {
+            if (typeof this.options.onDestroy == 'function') {
+                this.options.onDestroy();
+            }
+        },
         _buildDataContent: function() {
             var data = this.options.data;
             if (data && data.length > 0) {
@@ -105,16 +170,16 @@
                     var currentStep = Number(i) + 1;
                     var stepLabel = data[i].label ? data[i].label : `Step ${currentStep}`;
                     steps += `<div class="${_stepClass}" data-step="${currentStep}" data-step-skip=${data[i].skip==true}>
-                                <div class="dot"></div>
-                                <label class="label">${stepLabel}</label>
+                                <div class="${_stepDotClass}"></div>
+                                <label class="${_stepLabelClass}">${stepLabel}</label>
                                 </div>`;
                     stepContent += `<div class="${_stepContentClass}" data-step="${currentStep}" data-step-skip=${data[i].skip==true}>
                                        <div class="${_contentInnerClass}">${data[i].content}</div>
                                        </div>`
                 }
                 steps += `<div class="${_stepClass}" data-step="${data.length+1}" data-step-skip=false>
-                                <div class="dot"></div>
-                                <label class="label">Complete</label>
+                                <div class="${_stepDotClass}"></div>
+                                <label class="${_stepLabelClass}">${this.options.finalLabel}</label>
                                 </div>`;
                 stepContent += `<div class="${_stepContentClass}" data-step="${data.length+1}" data-step-skip=false>
                                        <div class="${_contentInnerClass}">${this.options.final}</div>
@@ -127,9 +192,9 @@
 
         },
         _buildFooterContent: function() {
-            var footer = `<button type="button" class="btn btn-sm btn-prev">Previous</button>
-            <button type="button" class="btn btn-sm btn-skip">Skip</button>
-            <button type="button" class="btn btn-sm btn-next">Next</button>`;
+            var footer = `<button type="button" class="btn btn-sm ${_prevClass}">${this.options.prevText}</button>
+            <button type="button" class="btn btn-sm ${_skipClass}">${this.options.skipText}</button>
+            <button type="button" class="btn btn-sm ${_nextClass}">${this.options.nextText}</button>`;
             this.footer.html(footer);
             this.prev = this.footer.find(`.${_prevClass}`);
             this.skip = this.footer.find(`.${_skipClass}`);
@@ -143,13 +208,13 @@
         _attachPrevEvent: function() {
             var $this = this;
             $this.prev.click(function() {
-                $this.next.text('Next');
+                $this.next.text($this.options.nextText);
                 var prevIdx = $this.currentStepIdx - 1;
                 if (prevIdx <= 1) {
                     prevIdx = 1;
-                    $this.prev.addClass('disabled').attr('disabled', 'disabled');
+                    $this.prev.addClass(_disabledClass).attr(_disabledClass, _disabledClass);
                 } else {
-                    $this.prev.removeClass('disabled').removeAttr('disabled');
+                    $this.prev.removeClass(_disabledClass).removeAttr(_disabledClass);
                 }
                 $this._currentStep(prevIdx);
                 $this._checkSkip();
@@ -157,11 +222,11 @@
             });
         },
         _checkSkip: function() {
-            var skipStep = this.modalSteps.find('.current').attr('data-step-skip') == 'true';
+            var skipStep = this.modalSteps.find(`.${_currentClass}`).attr('data-step-skip') == 'true';
             if (skipStep) {
-                this.skip.addClass('skippable');
+                this.skip.addClass(_skippableClass);
             } else {
-                this.skip.removeClass('skippable');
+                this.skip.removeClass(_skippableClass);
             }
 
         },
@@ -170,9 +235,9 @@
             $this.skip.click(function() {
                 var nextIdx = $this.currentStepIdx;
                 if (nextIdx + 1 <= 1) {
-                    $this.prev.addClass('disabled').attr('disabled', 'disabled');
+                    $this.prev.addClass(_disabledClass).attr(_disabledClass, _disabledClass);
                 } else {
-                    $this.prev.removeClass('disabled').removeAttr('disabled');
+                    $this.prev.removeClass(_disabledClass).removeAttr(_disabledClass);
                 }
                 $this._skipStep(nextIdx);
                 $this._showContent(nextIdx + 1);
@@ -188,14 +253,14 @@
                     return;
                 }
                 if (nextIdx >= $this.stepsCount) {
-                    $this.next.text('Finish');
+                    $this.next.text($this.options.finishText);
                 } else {
-                    $this.next.text('Next');
+                    $this.next.text($this.options.nextText);
                 }
                 if (nextIdx + 1 <= 1) {
-                    $this.prev.addClass('disabled').attr('disabled', 'disabled');
+                    $this.prev.addClass(_disabledClass).attr(_disabledClass, _disabledClass);
                 } else {
-                    $this.prev.removeClass('disabled').removeAttr('disabled');
+                    $this.prev.removeClass(_disabledClass).removeAttr(_disabledClass);
                 }
                 $this._completeStep(nextIdx);
                 $this._showContent(nextIdx + 1);
@@ -224,11 +289,11 @@
             var currentStep = this.modalSteps.find(`[data-step="${i}"]`);
             var $this = this;
             if (target == i) {
-                currentStep.removeClasses(['completed', 'skipped']).addClass('current');
+                currentStep.removeClasses([_completedClass, _skippedClass]).addClass(_currentClass);
                 $this._checkSkip();
             } else {
-                if (currentStep.hasAnyClass(['completed', 'current', 'skipped'])) {
-                    currentStep.removeClasses(['completed', 'current', 'skipped']);
+                if (currentStep.hasAnyClass([_completedClass, _currentClass, _skippedClass])) {
+                    currentStep.removeClasses([_completedClass, _currentClass, _skippedClass]);
                     setTimeout(function() {
                         $this._recursiveCurrentStep(target, --i);
                     }, 200);
@@ -240,31 +305,28 @@
         },
         _completeStep: function(i) {
             var $this = this;
-            this.modalSteps.find(`[data-step="${i}"]`).addClass('completed').removeClasses(['current', 'skipped']);
+            this.modalSteps.find(`[data-step="${i}"]`).addClass(_completedClass).removeClasses([_currentClass, _skippedClass]);
             setTimeout(function() {
-                $this.modalSteps.find(`[data-step="${Number(i)+1}"]`).addClass('current');
+                $this.modalSteps.find(`[data-step="${Number(i)+1}"]`).addClass(_currentClass);
                 $this.currentStepIdx = Number(i) + 1;
                 $this._checkSkip();
             }, 200);
         },
         _skipStep: function(i) {
             var $this = this;
-            this.modalSteps.find(`[data-step="${i}"]`).addClass('skipped').removeClasses(['current', 'completed']);
+            this.modalSteps.find(`[data-step="${i}"]`).addClass(_skippedClass).removeClasses([_currentClass, _completedClass]);
             setTimeout(function() {
-                $this.modalSteps.find(`[data-step="${Number(i)+1}"]`).addClass('current');
+                $this.modalSteps.find(`[data-step="${Number(i)+1}"]`).addClass(_currentClass);
                 $this.currentStepIdx = Number(i) + 1;
                 $this._checkSkip();
             }, 200);
         },
         _initialModal: function() {
             this._currentStep(1);
-            this.prev.addClass('disabled').attr('disabled', 'disabled');
+            this.prev.addClass(_disabledClass).attr(_disabledClass, _disabledClass);
             this._checkSkip();
             this._showContent(1);
-            this.next.text('Next');
-        },
-        _renderStep: function() {
-
+            this.next.text(this.options.nextText);
         }
     }
 
@@ -301,7 +363,7 @@
 
 
     $(document).ready(function() {
-        $('.modal').MultiStep();
+        $('.multi-step').MultiStep();
     });
 });
 $.fn.removeClasses = function(arr) {

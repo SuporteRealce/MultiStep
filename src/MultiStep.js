@@ -139,7 +139,7 @@
                 .attr('role', 'dialog')
                 .attr('aria-labelledby', `${id}Title`)
                 .attr('aria-hidden', 'true');
-            this.element.html(`<div class="modal-dialog modal-dialog-centered modal-${this.options.modalSize}" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="${id}LongTitle">${this.options.title}</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"></div><div class="modal-footer"></div></div></div>`);
+            this.element.html(`<div class="modal-dialog modal-dialog-centered modal-${this.options.modalSize} multi-step" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="${id}LongTitle">${this.options.title}</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body"></div><div class="modal-footer"></div></div></div>`);
             var $this = this;
             this.element.on('hide.bs.modal', function() {
                 $this._initialModal();
